@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const restify = require("restify");
 const environment_1 = require("../common/environment");
 const mongoose = require("mongoose");
+const merge_patch_parser_1 = require("../server/merge-patch.parser");
 class Server {
     initializeDb() {
         mongoose.Promise = global.Promise;
@@ -14,11 +15,12 @@ class Server {
         return new Promise((resolve, reject) => {
             try {
                 this.application = restify.createServer({
-                    name: 'meat-api',
+                    name: 'zeroANuvem',
                     version: '1.0.0'
                 });
                 this.application.use(restify.plugins.queryParser());
                 this.application.use(restify.plugins.bodyParser());
+                this.application.use(merge_patch_parser_1.mergePatchBodyParser);
                 //routes
                 for (let router of routers) {
                     router.applyRoutes(this.application);
